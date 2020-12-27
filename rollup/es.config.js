@@ -4,7 +4,6 @@ import {terser} from 'rollup-plugin-terser';
 export default {
   input: './esm/index.js',
   plugins: [
-    
     nodeResolve(),
     terser()
   ],
@@ -13,6 +12,6 @@ export default {
     exports: 'named',
     file: './es.js',
     format: 'iife',
-    name: 'uhtmlSsr'
+    name: 'uhtml'
   }
 };

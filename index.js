@@ -1,4 +1,4 @@
-self.uhtmlSsr = (function (exports) {
+self.uhtml = (function (exports) {
   'use strict';
 
   var umap = (function (_) {
@@ -17,7 +17,21 @@ self.uhtmlSsr = (function (exports) {
     };
   });
 
-  
+  function _typeof(obj) {
+    "@babel/helpers - typeof";
+
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function (obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof(obj);
+  }
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -31,7 +45,7 @@ self.uhtmlSsr = (function (exports) {
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
+      
     }
   }
 
@@ -138,7 +152,7 @@ self.uhtmlSsr = (function (exports) {
   };
 
   var getValue = function getValue(value) {
-    switch (typeof(value)) {
+    switch (_typeof(value)) {
       case 'string':
         return escape(value);
 
@@ -231,7 +245,7 @@ self.uhtmlSsr = (function (exports) {
               // as functions with a special toString method,
               // as objects with handleEvents and a method
 
-              switch (typeof(value)) {
+              switch (_typeof(value)) {
                 case 'object':
                   if (!(name in value)) break;
                   value = value[name];
@@ -329,8 +343,8 @@ self.uhtmlSsr = (function (exports) {
   exports.render = render;
   exports.svg = svg;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
+  
 
   return exports;
 
-}({}).default);
+}({}));

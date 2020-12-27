@@ -4,7 +4,6 @@ import babel from '@rollup/plugin-babel';
 export default {
   input: './esm/index.js',
   plugins: [
-    
     nodeResolve(),
     babel({
       presets: ['@babel/preset-env'],
@@ -16,6 +15,6 @@ export default {
     exports: 'named',
     file: './index.js',
     format: 'iife',
-    name: 'uhtmlSsr'
+    name: 'uhtml'
   }
 };
