@@ -8,6 +8,8 @@
 
 This module can be used as drop-in replacement for *µhtml* components, but rendered *SSR*, or where there is no *DOM*.
 
+This module also exports `uhtml-ssr/async` helpers to always resolve asynchronous interpolations.
+
 ```js
 import {render, html, svg} from 'uhtml-ssr';
 

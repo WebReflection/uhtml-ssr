@@ -29,7 +29,7 @@
     "coveralls": "^3.1.0",
     "drop-babel-typeof": "^1.0.3",
     "nyc": "^15.1.0",
-    "require-overrides": "^0.1.0",
+    "require-overrides": "^0.2.3",
     "rollup": "^2.35.1",
     "rollup-plugin-terser": "^7.0.2",
     "terser": "^5.5.1"
@@ -41,10 +41,15 @@
       "import": "./esm/index.js",
       "default": "./cjs/index.js"
     },
+    "./async": {
+      "import": "./esm/async.js",
+      "default": "./cjs/async.js"
+    },
     "./package.json": "./package.json"
   },
   "unpkg": "min.js",
   "dependencies": {
+    "async-tag": "^0.2.0",
     "html-escaper": "^3.0.0",
     "uhandlers": "^0.3.6",
     "uhyphen": "^0.1.0",

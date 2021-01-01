@@ -13,6 +13,9 @@ class Response extends Hole {
   write(_) {
     this._ = _;
   }
+  toString() {
+    return this._;
+  }
 }
 
 function special() {}

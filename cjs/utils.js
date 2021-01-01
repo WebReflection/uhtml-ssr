@@ -35,14 +35,7 @@ const getValue = value => {
   return value == null ? '' : escape(String(value));
 };
 
-class Hole {
-  constructor(_) {
-    this._ = _;
-  }
-  toString() {
-    return this._;
-  }
-}
+class Hole extends String {}
 exports.Hole = Hole
 
 const parse = (template, expectedLength, svg) => {

@@ -34,14 +34,7 @@ const getValue = value => {
   return value == null ? '' : escape(String(value));
 };
 
-export class Hole {
-  constructor(_) {
-    this._ = _;
-  }
-  toString() {
-    return this._;
-  }
-}
+export class Hole extends String {}
 
 export const parse = (template, expectedLength, svg) => {
   const html = instrument(template, prefix, svg);
