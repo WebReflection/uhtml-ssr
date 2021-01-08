@@ -9,6 +9,7 @@ export default {
   ],
   
   output: {
+    esModule: false,
     exports: 'named',
     file: './es.js',
     format: 'iife',
