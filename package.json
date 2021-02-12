@@ -1,6 +1,6 @@
 {
   "name": "uhtml-ssr",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "uhtml for Service Worker, Web Worker, NodeJS, and other SSR cases",
   "main": "./cjs/index.js",
   "scripts": {
