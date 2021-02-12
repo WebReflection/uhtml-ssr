@@ -1,7 +1,7 @@
 'use strict';
 const {escape} = require('html-escaper');
-const uhyphen = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('uhyphen'));
-const instrument = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('uparser'));
+const uhyphen = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require('uhyphen'));
+const instrument = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require('uparser'));
 const {ref} = require('uhandlers');
 
 const {isArray} = Array;
@@ -62,6 +62,15 @@ const parse = (template, expectedLength, svg) => {
           });
           break;
         // setters as boolean attributes (.disabled .contentEditable)
+        case name[0] === '?':
+          const boolean = name.slice(1).toLowerCase();
+          updates.push(value => {
+            let result = pre;
+            if (value)
+              result += ` ${boolean}`;
+            return result;
+          });
+          break;
         case name[0] === '.':
           const lower = name.slice(1).toLowerCase();
           updates.push(lower === 'dataset' ?

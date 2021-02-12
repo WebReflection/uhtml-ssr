@@ -1,5 +1,5 @@
 'use strict';
-const asyncTag = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('async-tag'));
+const asyncTag = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require('async-tag'));
 
 const {render: $render, html: $html, svg: $svg} = require('./index.js');
 

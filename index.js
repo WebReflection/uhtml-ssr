@@ -335,6 +335,16 @@ self.uhtml = (function (exports) {
             break;
           // setters as boolean attributes (.disabled .contentEditable)
 
+          case name[0] === '?':
+            var _boolean = name.slice(1).toLowerCase();
+
+            updates.push(function (value) {
+              var result = pre;
+              if (value) result += " ".concat(_boolean);
+              return result;
+            });
+            break;
+
           case name[0] === '.':
             var lower = name.slice(1).toLowerCase();
             updates.push(lower === 'dataset' ? function (value) {

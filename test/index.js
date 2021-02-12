@@ -95,6 +95,17 @@ assert(
 );
 
 assert(
+  render(String, html`<this ?hidden=${1}>is a html test</this>`),
+  `<this hidden>is a html test</this>`
+);
+
+assert(
+  render(String, html`<this ?hidden=${0}>is a html test</this>`),
+  `<this>is a html test</this>`
+);
+
+
+assert(
   render(String, html`<this aria=${{role: 'section', label: 'any'}}>is a html test</this>`),
   `<this role="section" aria-label="any">is a html test</this>`
 );

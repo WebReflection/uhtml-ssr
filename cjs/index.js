@@ -1,5 +1,5 @@
 'use strict';
-const umap = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('umap'));
+const umap = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require('umap'));
 const {Hole, parse} = require('./utils.js');
 
 const cache = umap(new WeakMap);

@@ -60,6 +60,15 @@ export const parse = (template, expectedLength, svg) => {
           });
           break;
         // setters as boolean attributes (.disabled .contentEditable)
+        case name[0] === '?':
+          const boolean = name.slice(1).toLowerCase();
+          updates.push(value => {
+            let result = pre;
+            if (value)
+              result += ` ${boolean}`;
+            return result;
+          });
+          break;
         case name[0] === '.':
           const lower = name.slice(1).toLowerCase();
           updates.push(lower === 'dataset' ?
