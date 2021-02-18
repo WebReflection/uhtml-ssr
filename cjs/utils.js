@@ -31,6 +31,9 @@ const getValue = value => {
         case value instanceof Hole:
           return value.toString();
       }
+      break;
+    case 'function':
+      return getValue(value());
   }
   return value == null ? '' : escape(String(value));
 };
