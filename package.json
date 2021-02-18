@@ -23,16 +23,16 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/preset-env": "^7.12.16",
-    "@rollup/plugin-babel": "^5.2.3",
-    "@rollup/plugin-node-resolve": "^11.1.1",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
     "ascjs": "^5.0.1",
-    "c8": "^7.5.0",
+    "c8": "^7.6.0",
     "coveralls": "^3.1.0",
     "drop-babel-typeof": "^1.0.3",
     "require-overrides": "^0.2.3",
-    "rollup": "^2.38.5",
+    "rollup": "^2.39.0",
     "rollup-plugin-terser": "^7.0.2",
-    "terser": "^5.6.0-beta"
+    "terser": "^5.6.0"
   },
   "module": "./esm/index.js",
   "type": "module",
@@ -50,8 +50,8 @@
   "unpkg": "min.js",
   "dependencies": {
     "async-tag": "^0.2.0",
-    "html-escaper": "^3.0.0",
-    "uhandlers": "^0.4.1",
+    "html-escaper": "^3.0.3",
+    "uhandlers": "^0.4.2",
     "uhyphen": "^0.1.0",
     "umap": "^1.0.2",
     "uparser": "^0.2.1"
