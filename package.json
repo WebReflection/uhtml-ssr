@@ -4,13 +4,12 @@
   "description": "uhtml for Service Worker, Web Worker, NodeJS, and other SSR cases",
   "main": "./cjs/index.js",
   "scripts": {
-    "build": "npm run cjs && npm run rollup:es && npm run rollup:babel && npm run min && npm run test && npm run size",
+    "build": "npm run cjs && npm run rollup:es && npm run rollup:babel && npm run test && npm run size",
     "cjs": "ascjs --no-default esm cjs",
     "rollup:es": "rollup --config rollup/es.config.js && sed -i.bck 's/^var /self./' es.js && rm -rf es.js.bck",
     "rollup:babel": "rollup --config rollup/babel.config.js && sed -i.bck 's/^var /self./' index.js && rm -rf index.js.bck",
-    "min": "terser index.js --comments='/^!/' -c -m -o min.js",
     "coveralls": "c8 report --reporter=text-lcov | coveralls",
-    "size": "cat index.js | brotli | wc -c && cat min.js | brotli | wc -c && cat es.js | brotli | wc -c",
+    "size": "cat index.js | brotli | wc -c && cat es.js | brotli | wc -c",
     "test": "c8 node test/index.js"
   },
   "keywords": [
@@ -44,7 +43,7 @@
     },
     "./package.json": "./package.json"
   },
-  "unpkg": "min.js",
+  "unpkg": "es.js",
   "dependencies": {
     "async-tag": "^0.2.0",
     "html-escaper": "^3.0.3",
