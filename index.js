@@ -93,11 +93,17 @@ self.uhtml = (function (exports) {
     return svg ? output : output.replace(selfClosing, regular);
   };
 
-  const ref = node => value => {
-    if (typeof value === 'function')
-      value(node);
-    else
-      value.current = node;
+  const ref = node => {
+    let oldValue;
+    return value => {
+      if (oldValue !== value) {
+        oldValue = value;
+        if (typeof value === 'function')
+          value(node);
+        else
+          value.current = node;
+      }
+    };
   };
 
   const {isArray} = Array;
