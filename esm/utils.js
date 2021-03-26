@@ -93,7 +93,7 @@ export const parse = (template, expectedLength, svg) => {
           break;
         case name[0] === '@':
           name = 'on' + name.slice(1);
-        case name.slice(0, 2) === 'on':
+        case name[0] === 'o' && name[1] === 'n':
           updates.push(value => {
             let result = pre;
             // allow handleEvent based objects that
