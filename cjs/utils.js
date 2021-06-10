@@ -52,7 +52,7 @@ const parse = (template, expectedLength, svg) => {
     if (match[2])
       updates.push(value => (pre + getValue(value)));
     else {
-      const name = match[5];
+      let name = match[5];
       const quote = match[4];
       switch (true) {
         case name === 'aria':
