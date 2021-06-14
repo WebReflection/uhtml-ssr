@@ -1,6 +1,15 @@
 'use strict';
+const {unescape} = require('html-escaper');
 const umap = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require('umap'));
 const {Hole, parse} = require('./utils.js');
+
+const {replace} = '';
+
+const clean = content => replace.call(
+  content,
+  /<(script|style|title)>([\s\S]+)<\/\1>/ig,
+  (_, name, content) => `<${name}>${unescape(content)}</${name}>`
+);
 
 const cache = umap(new WeakMap);
 
@@ -30,7 +39,7 @@ const svg = uhtmlParity(true);
 exports.svg = svg;
 
 const render = (where, what) => {
-  const content = (typeof what === 'function' ? what() : what).toString();
+  const content = clean(typeof what === 'function' ? what() : what);
   return typeof where === 'function' ?
           where(content) :
           (where.write(content), where);

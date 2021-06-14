@@ -1,16 +1,6 @@
 self.uhtml = (function (exports) {
   'use strict';
 
-  var umap = _ => ({
-    // About: get: _.get.bind(_)
-    // It looks like WebKit/Safari didn't optimize bind at all,
-    // so that using bind slows it down by 60%.
-    // Firefox and Chrome are just fine in both cases,
-    // so let's use the approach that works fast everywhere 👍
-    get: key => _.get(key),
-    set: (key, value) => (_.set(key, value), value)
-  });
-
   /**
    * Copyright (C) 2017-present by Andrea Giammarchi - @WebReflection
    *
@@ -33,7 +23,10 @@ self.uhtml = (function (exports) {
    * THE SOFTWARE.
    */
 
-  const {replace} = '';
+  const {replace: replace$1} = '';
+
+  // escape
+  const es = /&(?:amp|#38|lt|#60|gt|#62|apos|#39|quot|#34);/g;
   const ca = /[&<>'"]/g;
 
   const esca = {
@@ -52,7 +45,43 @@ self.uhtml = (function (exports) {
    *  the input type is unexpected, except for boolean and numbers,
    *  converted as string.
    */
-  const escape = es => replace.call(es, ca, pe);
+  const escape = es => replace$1.call(es, ca, pe);
+
+
+  // unescape
+  const unes = {
+    '&amp;': '&',
+    '&#38;': '&',
+    '&lt;': '<',
+    '&#60;': '<',
+    '&gt;': '>',
+    '&#62;': '>',
+    '&apos;': "'",
+    '&#39;': "'",
+    '&quot;': '"',
+    '&#34;': '"'
+  };
+  const cape = m => unes[m];
+
+  /**
+   * Safely unescape previously escaped entities such as `&`, `<`, `>`, `"`,
+   * and `'`.
+   * @param {string} un a previously escaped string
+   * @returns {string} the unescaped input, and it **throws** an error if
+   *  the input type is unexpected, except for boolean and numbers,
+   *  converted as string.
+   */
+  const unescape = un => replace$1.call(un, es, cape);
+
+  var umap = _ => ({
+    // About: get: _.get.bind(_)
+    // It looks like WebKit/Safari didn't optimize bind at all,
+    // so that using bind slows it down by 60%.
+    // Firefox and Chrome are just fine in both cases,
+    // so let's use the approach that works fast everywhere 👍
+    get: key => _.get(key),
+    set: (key, value) => (_.set(key, value), value)
+  });
 
   var uhyphen = camel => camel.replace(/(([A-Z0-9])([A-Z0-9][a-z]))|(([a-z])([A-Z]))/g, '$2$5-$3$6')
                                .toLowerCase();
@@ -257,6 +286,14 @@ self.uhtml = (function (exports) {
     return ` data-${uhyphen(key)}="${escape(this[key])}"`;
   }
 
+  const {replace} = '';
+
+  const clean = content => replace.call(
+    content,
+    /<(script|style|title)>([\s\S]+)<\/\1>/ig,
+    (_, name, content) => `<${name}>${unescape(content)}</${name}>`
+  );
+
   const cache = umap(new WeakMap);
 
   const uhtmlParity = svg => {
@@ -281,7 +318,7 @@ self.uhtml = (function (exports) {
   const svg = uhtmlParity(true);
 
   const render = (where, what) => {
-    const content = (typeof what === 'function' ? what() : what).toString();
+    const content = clean(typeof what === 'function' ? what() : what);
     return typeof where === 'function' ?
             where(content) :
             (where.write(content), where);
