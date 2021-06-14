@@ -1,14 +1,5 @@
-import {unescape} from 'html-escaper';
 import umap from 'umap';
 import {Hole, parse} from './utils.js';
-
-const {replace} = '';
-
-const clean = content => replace.call(
-  content,
-  /<(script|style|title)>([\s\S]+)<\/\1>/ig,
-  (_, name, content) => `<${name}>${unescape(content)}</${name}>`
-);
 
 const cache = umap(new WeakMap);
 
@@ -36,7 +27,7 @@ export const html = uhtmlParity(false);
 export const svg = uhtmlParity(true);
 
 export const render = (where, what) => {
-  const content = clean(typeof what === 'function' ? what() : what);
+  const content = (typeof what === 'function' ? what() : what).toString();
   return typeof where === 'function' ?
           where(content) :
           (where.write(content), where);
