@@ -20,13 +20,13 @@
   "author": "Andrea Giammarchi",
   "license": "ISC",
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
     "ascjs": "^5.0.1",
     "c8": "^7.7.3",
     "coveralls": "^3.1.1",
     "drop-babel-typeof": "^1.0.3",
     "require-overrides": "^0.3.0",
-    "rollup": "^2.53.1",
+    "rollup": "^2.54.0",
     "rollup-plugin-terser": "^7.0.2",
     "terser": "^5.7.1"
   },
