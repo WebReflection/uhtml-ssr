@@ -178,7 +178,13 @@ self.uhtml = (function (exports) {
           case name[0] === '.':
             const lower = name.slice(1).toLowerCase();
             updates.push(lower === 'dataset' ?
-              (value => (pre + keys(value).map(data, value).join(''))) :
+              (value => (
+                pre 
+                + keys(value)
+                  .filter(key => value[key] != null)
+                  .map(data, value)
+                  .join('')
+              )) :
               (value => {
                 let result = pre;
                 // null, undefined, and false are not shown at all
