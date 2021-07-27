@@ -95,6 +95,11 @@ assert(
 );
 
 assert(
+  render(String, html`<this .dataset=${{any: 'value', other: undefined}}>is a html test</this>`),
+  `<this data-any="value">is a html test</this>`
+);
+
+assert(
   render(String, html`<this ?hidden=${1}>is a html test</this>`),
   `<this hidden>is a html test</this>`
 );
