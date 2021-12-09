@@ -1,6 +1,6 @@
 'use strict';
 const umap = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require('umap'));
-const {Hole, parse} = require('./utils.js');
+const {Hole, foreign, parse} = require('./utils.js');
 
 const cache = umap(new WeakMap);
 
@@ -23,6 +23,7 @@ const uhtmlParity = svg => {
 };
 
 exports.Hole = Hole;
+exports.foreign = foreign;
 
 const html = uhtmlParity(false);
 exports.html = html;

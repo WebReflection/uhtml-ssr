@@ -140,6 +140,20 @@ self.uhtml = (function (exports) {
     return value == null ? '' : escape(String(value));
   };
 
+  // flag for foreign checks (slower path, fast by default)
+  let useForeign = false;
+
+  class Foreign {
+    constructor(handler, value) {
+      this._ = (...args) => handler(...args, value);
+    }
+  }
+
+  const foreign = (handler, value) => {
+    useForeign = true;
+    return new Foreign(handler, value);
+  };
+
   class Hole extends String {}
 
   const parse = (template, expectedLength, svg) => {
@@ -230,8 +244,14 @@ self.uhtml = (function (exports) {
           default:
             updates.push(value => {
               let result = pre;
-              if (value != null)
+              if (value != null) {
+                if (useForeign && value instanceof Foreign) {
+                  value = value._(null, name);
+                  if (value == null)
+                    return result;
+                }
                 result += attribute(name, quote, value);
+              }
               return result;
             });
             break;
@@ -298,10 +318,11 @@ self.uhtml = (function (exports) {
   }
 
   exports.Hole = Hole;
+  exports.foreign = foreign;
   exports.html = html;
   exports.render = render;
   exports.svg = svg;
 
   return exports;
 
-}({}));
+})({});

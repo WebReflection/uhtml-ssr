@@ -1,6 +1,6 @@
 # <em>µ</em>html-ssr
 
-[![Build Status](https://travis-ci.com/WebReflection/uhtml-ssr.svg?branch=main)](https://travis-ci.com/WebReflection/uhtml-ssr) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/uhtml-ssr/badge.svg?branch=main)](https://coveralls.io/github/WebReflection/uhtml-ssr?branch=main)
+[![build status](https://github.com/WebReflection/uhtml-ssr/actions/workflows/node.js.yml/badge.svg)](https://github.com/WebReflection/uhtml-ssr/actions) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/uhtml-ssr/badge.svg?branch=main)](https://coveralls.io/github/WebReflection/uhtml-ssr?branch=main)
 
 <sup>**Social Media Photo by [Nathan Dumlao](https://unsplash.com/@nate_dumlao) on [Unsplash](https://unsplash.com/)**</sup>
 

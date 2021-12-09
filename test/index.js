@@ -1,4 +1,4 @@
-const {Hole, render, html, svg} = require('../cjs');
+const {Hole, render, html, svg, foreign} = require('../cjs');
 
 const assert = (result, expected) => {
   console.assert(result === expected, result);
@@ -128,4 +128,20 @@ assert(
 assert(
   render(new Response, () => svg`<this>is a ${'svg'} test with a <rect /></this>`).toString(),
   `<this>is a svg test with a <rect /></this>`
+);
+
+var handler = (node, name, value) => {
+  assert(name, 'any');
+  assert(value, 'value');
+  return 'ok';
+};
+assert(
+  render(String, html`<p any=${foreign(handler, 'value')} />`),
+  `<p any="ok"></p>`
+);
+
+var handler = (node, name, value) => {};
+assert(
+  render(String, html`<p any=${foreign(handler, 'value')} />`),
+  `<p></p>`
 );

@@ -38,6 +38,22 @@ const getValue = value => {
   return value == null ? '' : escape(String(value));
 };
 
+// flag for foreign checks (slower path, fast by default)
+let useForeign = false;
+
+class Foreign {
+  constructor(handler, value) {
+    this._ = (...args) => handler(...args, value);
+  }
+}
+exports.Foreign = Foreign
+
+const foreign = (handler, value) => {
+  useForeign = true;
+  return new Foreign(handler, value);
+};
+exports.foreign = foreign;
+
 class Hole extends String {}
 exports.Hole = Hole
 
@@ -129,8 +145,14 @@ const parse = (template, expectedLength, svg) => {
         default:
           updates.push(value => {
             let result = pre;
-            if (value != null)
+            if (value != null) {
+              if (useForeign && value instanceof Foreign) {
+                value = value._(null, name);
+                if (value == null)
+                  return result;
+              }
               result += attribute(name, quote, value);
+            }
             return result;
           });
           break;

@@ -1,5 +1,5 @@
 import umap from 'umap';
-import {Hole, parse} from './utils.js';
+import {Hole, foreign, parse} from './utils.js';
 
 const cache = umap(new WeakMap);
 
@@ -21,7 +21,7 @@ const uhtmlParity = svg => {
   return fn;
 };
 
-export {Hole};
+export {Hole, foreign};
 
 export const html = uhtmlParity(false);
 export const svg = uhtmlParity(true);
