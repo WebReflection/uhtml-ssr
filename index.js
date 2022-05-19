@@ -1,15 +1,51 @@
 self.uhtml = (function (exports) {
   'use strict';
 
-  var umap = _ => ({
-    // About: get: _.get.bind(_)
-    // It looks like WebKit/Safari didn't optimize bind at all,
-    // so that using bind slows it down by 60%.
-    // Firefox and Chrome are just fine in both cases,
-    // so let's use the approach that works fast everywhere 👍
-    get: key => _.get(key),
-    set: (key, value) => (_.set(key, value), value)
-  });
+  class WeakMapSet extends WeakMap {
+    set(key, value) {
+      super.set(key, value);
+      return value;
+    }
+  }
+
+  /*! (c) Andrea Giammarchi - ISC */
+  const empty = /^(?:area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)$/i;
+  const elements = /<([a-z]+[a-z0-9:._-]*)([^>]*?)(\/?)>/g;
+  const attributes = /([^\s\\>"'=]+)\s*=\s*(['"]?)\x01/g;
+  const holes = /[\x01\x02]/g;
+
+  // \x01 Node.ELEMENT_NODE
+  // \x02 Node.ATTRIBUTE_NODE
+
+  /**
+   * Given a template, find holes as both nodes and attributes and
+   * return a string with holes as either comment nodes or named attributes.
+   * @param {string[]} template a template literal tag array
+   * @param {string} prefix prefix to use per each comment/attribute
+   * @param {boolean} svg enforces self-closing tags
+   * @returns {string} X/HTML with prefixed comments or attributes
+   */
+  var instrument = (template, prefix, svg) => {
+    let i = 0;
+    return template
+            .join('\x01')
+            .trim()
+            .replace(
+              elements,
+              (_, name, attrs, selfClosing) => {
+                let ml = name + attrs.replace(attributes, '\x02=$2$1').trimEnd();
+                if (selfClosing.length)
+                  ml += (svg || empty.test(name)) ? ' /' : ('></' + name);
+                return '<' + ml + '>';
+              }
+            )
+            .replace(
+              holes,
+              hole => hole === '\x01' ?
+                ('<!--' + prefix + i++ + '-->') :
+                (prefix + i++)
+            );
+  };
 
   /**
    * Copyright (C) 2017-present by Andrea Giammarchi - @WebReflection
@@ -57,42 +93,6 @@ self.uhtml = (function (exports) {
   var uhyphen = camel => camel.replace(/(([A-Z0-9])([A-Z0-9][a-z]))|(([a-z])([A-Z]))/g, '$2$5-$3$6')
                                .toLowerCase();
 
-  const attr = /([^\s\\>"'=]+)\s*=\s*(['"]?)$/;
-  const empty = /^(?:area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)$/i;
-  const node = /<[a-z][^>]+$/i;
-  const notNode = />[^<>]*$/;
-  const selfClosing = /<([a-z]+[a-z0-9:._-]*)([^>]*?)(\/>)/ig;
-  const trimEnd = /\s+$/;
-
-  const isNode = (template, i) => (
-      0 < i-- && (
-      node.test(template[i]) || (
-        !notNode.test(template[i]) && isNode(template, i)
-      )
-    )
-  );
-
-  const regular = (original, name, extra) => empty.test(name) ?
-                    original : `<${name}${extra.replace(trimEnd,'')}></${name}>`;
-
-  var instrument = (template, prefix, svg) => {
-    const text = [];
-    const {length} = template;
-    for (let i = 1; i < length; i++) {
-      const chunk = template[i - 1];
-      text.push(attr.test(chunk) && isNode(template, i) ?
-        chunk.replace(
-          attr,
-          (_, $1, $2) => `${prefix}${i - 1}=${$2 || '"'}${$1}${$2 ? '' : '"'}`
-        ) :
-        `${chunk}<!--${prefix}${i - 1}-->`
-      );
-    }
-    text.push(template[length - 1]);
-    const output = text.join('').trim();
-    return svg ? output : output.replace(selfClosing, regular);
-  };
-
   const ref = node => {
     let oldValue;
     return value => {
@@ -112,8 +112,9 @@ self.uhtml = (function (exports) {
 
   const passRef = ref(null);
   const prefix = 'isµ' + Date.now();
+  const rename = /([^\s>]+)[\s\S]*$/;
   const interpolation = new RegExp(
-    `(<!--${prefix}(\\d+)-->|\\s*${prefix}(\\d+)=('|")([^\\4]+?)\\4)`, 'g'
+    `(<!--${prefix}(\\d+)-->|\\s*${prefix}(\\d+)=([^\s>]))`, 'g'
   );
 
   const attribute = (name, quote, value) =>
@@ -167,8 +168,21 @@ self.uhtml = (function (exports) {
       if (match[2])
         updates.push(value => (pre + getValue(value)));
       else {
-        let name = match[5];
-        const quote = match[4];
+        let name = '';
+        let quote = match[4];
+        switch (quote) {
+          case '"':
+          case "'":
+            const next = html.indexOf(quote, i);
+            name = html.slice(i, next);
+            i = next + 1;
+            break;
+          default:
+            name = html.slice(--i).replace(rename, '$1');
+            i += name.length;
+            quote = '"';
+            break;
+        }
         switch (true) {
           case name === 'aria':
             updates.push(value => (pre + keys(value).map(aria, value).join('')));
@@ -193,7 +207,7 @@ self.uhtml = (function (exports) {
             const lower = name.slice(1).toLowerCase();
             updates.push(lower === 'dataset' ?
               (value => (
-                pre 
+                pre
                 + keys(value)
                   .filter(key => value[key] != null)
                   .map(data, value)
@@ -283,7 +297,7 @@ self.uhtml = (function (exports) {
     return ` data-${uhyphen(key)}="${escape(this[key])}"`;
   }
 
-  const cache = umap(new WeakMap);
+  const cache = new WeakMapSet;
 
   const uhtmlParity = svg => {
     const fn = (template, ...values) => {

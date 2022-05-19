@@ -1,6 +1,6 @@
+import instrument from '@webreflection/uparser';
 import {escape} from 'html-escaper';
 import uhyphen from 'uhyphen';
-import instrument from 'uparser';
 import {ref} from 'uhandlers';
 
 const {isArray} = Array;
@@ -9,8 +9,9 @@ const {keys} = Object;
 
 const passRef = ref(null);
 const prefix = 'isµ' + Date.now();
+const rename = /([^\s>]+)[\s\S]*$/;
 const interpolation = new RegExp(
-  `(<!--${prefix}(\\d+)-->|\\s*${prefix}(\\d+)=('|")([^\\4]+?)\\4)`, 'g'
+  `(<!--${prefix}(\\d+)-->|\\s*${prefix}(\\d+)=([^\s>]))`, 'g'
 );
 
 const attribute = (name, quote, value) =>
@@ -64,8 +65,21 @@ export const parse = (template, expectedLength, svg) => {
     if (match[2])
       updates.push(value => (pre + getValue(value)));
     else {
-      let name = match[5];
-      const quote = match[4];
+      let name = '';
+      let quote = match[4];
+      switch (quote) {
+        case '"':
+        case "'":
+          const next = html.indexOf(quote, i);
+          name = html.slice(i, next);
+          i = next + 1;
+          break;
+        default:
+          name = html.slice(--i).replace(rename, '$1');
+          i += name.length;
+          quote = '"';
+          break;
+      }
       switch (true) {
         case name === 'aria':
           updates.push(value => (pre + keys(value).map(aria, value).join('')));
@@ -90,7 +104,7 @@ export const parse = (template, expectedLength, svg) => {
           const lower = name.slice(1).toLowerCase();
           updates.push(lower === 'dataset' ?
             (value => (
-              pre 
+              pre
               + keys(value)
                 .filter(key => value[key] != null)
                 .map(data, value)

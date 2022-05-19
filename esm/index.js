@@ -1,7 +1,7 @@
-import umap from 'umap';
+import {WeakMapSet} from '@webreflection/mapset';
 import {Hole, foreign, parse} from './utils.js';
 
-const cache = umap(new WeakMap);
+const cache = new WeakMapSet;
 
 const uhtmlParity = svg => {
   const fn = (template, ...values) => {

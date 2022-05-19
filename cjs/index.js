@@ -1,8 +1,8 @@
 'use strict';
-const umap = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require('umap'));
+const {WeakMapSet} = require('@webreflection/mapset');
 const {Hole, foreign, parse} = require('./utils.js');
 
-const cache = umap(new WeakMap);
+const cache = new WeakMapSet;
 
 const uhtmlParity = svg => {
   const fn = (template, ...values) => {

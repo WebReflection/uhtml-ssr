@@ -20,14 +20,14 @@
   "author": "Andrea Giammarchi",
   "license": "ISC",
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "ascjs": "^5.0.1",
-    "c8": "^7.10.0",
+    "c8": "^7.11.3",
     "drop-babel-typeof": "^1.0.3",
     "require-overrides": "^0.3.0",
-    "rollup": "^2.61.0",
+    "rollup": "^2.74.0",
     "rollup-plugin-terser": "^7.0.2",
-    "terser": "^5.10.0"
+    "terser": "^5.13.1"
   },
   "module": "./esm/index.js",
   "type": "module",
@@ -52,12 +52,12 @@
   },
   "unpkg": "es.js",
   "dependencies": {
+    "@webreflection/mapset": "^1.0.1",
+    "@webreflection/uparser": "^0.2.4",
     "async-tag": "^0.2.0",
     "html-escaper": "^3.0.3",
-    "uhandlers": "^0.6.0",
-    "uhyphen": "^0.1.0",
-    "umap": "^1.0.2",
-    "uparser": "^0.2.1"
+    "uhandlers": "^0.6.1",
+    "uhyphen": "^0.1.0"
   },
   "repository": {
     "type": "git",
