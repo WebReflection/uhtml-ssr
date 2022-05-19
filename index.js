@@ -114,7 +114,7 @@ self.uhtml = (function (exports) {
   const prefix = 'isµ' + Date.now();
   const rename = /([^\s>]+)[\s\S]*$/;
   const interpolation = new RegExp(
-    `(<!--${prefix}(\\d+)-->|\\s*${prefix}(\\d+)=([^\s>]))`, 'g'
+    `(<!--${prefix}(\\d+)-->|\\s*${prefix}(\\d+)=([^\\s>]))`, 'g'
   );
 
   const attribute = (name, quote, value) =>
